@@ -53,4 +53,6 @@ h2. Functions
 * clear()
 * loop(drawing, options)
 
-Sory, more documentation coming soon...
+h2. More?
+
+Sorry, documentation coming soon...
