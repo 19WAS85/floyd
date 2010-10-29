@@ -8,9 +8,9 @@ $(function() {
     var context = container.getContext(options.context)
     
     var brushDefaults = { stroke: 'transparent', fill: '#000' }
-    
+    var arcDefaults = { startAngle: 0, endAngle: Math.PI * 2, stroke: '#000', fill: 'transparent' }
     var pathDefaults = { style: 'stroke', color: '#000', close: false }
-    
+    var textDefaults = { baseline: 'top', align: 'left' }
     var loopDefaults = { time: 20, clear: true }
     
     var addGradientColors = function(gradient, colors) {
@@ -52,8 +52,13 @@ $(function() {
         context.stroke();
       },
       
-      arc : function() {
-        // TODO!
+      arc : function(x, y, s, arcOptions) {
+        arcOptions = $.extend(arcDefaults, arcOptions);
+        context.arc(x, y, s, arcOptions.startAngle, arcOptions.endAngle, true);
+        context.strokeStyle = arcOptions.stroke
+        context.fillStyle = arcOptions.fill
+        context.stroke();
+        context.fill();
       },
       
       path : function(points, pathOptions) {
@@ -78,8 +83,13 @@ $(function() {
         }
       },
       
-      image : function() {
-        // TODO!
+      image : function(source, x, y, w, h) {
+        var img = new Image();
+        img.onload = function() {
+          if(w != null) context.drawImage(img, x, y, w, h);
+          else context.drawImage(img, x, y);
+        }
+        img.src = source;
       },
       
       gradient : function(x0, y0, x1, y1, colors) {
@@ -92,8 +102,12 @@ $(function() {
         return addGradientColors(gradient, colors)
       },
       
-      text : function() {
-        // TODO!
+      text : function(content, x, y, textOptions) {
+        var textOptions = $.extend(textDefaults, textOptions);
+        if(textOptions.font != null) context.font = textOptions.font;
+        context.textAlign = textOptions.align;
+        context.textBaseline = textOptions.baseline;
+        context.fillText(content, x, y);
       },
       
       clear : function() {
