@@ -13,6 +13,19 @@ $(function() {
     
     var loopDefaults = { time: 20, clear: true }
     
+    var addGradientColors = function(gradient, colors) {
+      for(var i = 0; i < colors.length; i++) {
+        if(colors.length > 2) {
+          var index = colors[i][0]
+          var color = colors[i][1]
+          gradient.addColorStop(index, color)
+        } else {
+          gradient.addColorStop(i, colors[i])
+        }
+      }
+      return gradient
+    }
+    
     return {
       target: target,
       container: container,
@@ -30,11 +43,11 @@ $(function() {
         this.rect(x, y, s, s, brush)
       },
       
-      line : function(x1, y1, x2, y2, stroke) {
+      line : function(x0, y0, x1, y1, stroke) {
         if(stroke == null) stroke = '#000'
         context.beginPath()
-        context.moveTo(x1, y1)
-        context.lineTo(x2, y2)
+        context.moveTo(x0, y0)
+        context.lineTo(x1, y1)
         context.strokeStyle = stroke;
         context.stroke();
       },
@@ -65,7 +78,21 @@ $(function() {
         }
       },
       
-      gradient : function() {
+      image : function() {
+        // TODO!
+      },
+      
+      gradient : function(x0, y0, x1, y1, colors) {
+        var gradient = context.createLinearGradient(x0, y0, x1, y1)
+        return addGradientColors(gradient, colors)
+      },
+      
+      radialGradient : function(x0, y0, r0, x1, y1, r1, colors) {
+        var gradient = context.createRadialGradient(x0, y0, r0, x1, y1, r1)
+        return addGradientColors(gradient, colors)
+      },
+      
+      text : function() {
         // TODO!
       },
       
