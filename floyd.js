@@ -7,9 +7,10 @@ $(function() {
     var container = target.get(0)
     var context = container.getContext(options.context)
     
-    var brushDefaults = { stroke: 'transparent', fill: '#000' }
-    var arcDefaults = { startAngle: 0, endAngle: Math.PI * 2, stroke: '#000', fill: 'transparent' }
-    var pathDefaults = { style: 'stroke', color: '#000', close: false }
+    var shadowDefaults = { blur: 5, color: 'gray' }
+    var brushDefaults = { stroke: 'transparent', fill: 'black' }
+    var arcDefaults = { startAngle: 0, endAngle: Math.PI * 2, stroke: 'black', fill: 'transparent' }
+    var pathDefaults = { style: 'stroke', color: 'black', close: false }
     var textDefaults = { baseline: 'top', align: 'left' }
     var loopDefaults = { time: 20, clear: true }
     
@@ -26,6 +27,22 @@ $(function() {
       return gradient
     }
     
+    var checkEffects = function(context, effects) {
+      if(effects != null) {
+        if(effects.shadow != null) {
+          shadow = $.extend(shadowDefaults, effects.shadow);
+          context.shadowOffsetX = shadow.x;
+          context.shadowOffsetY = shadow.y;
+          context.shadowBlur = shadow.blur;
+          context.shadowColor = shadow.color;
+        }
+        if(effects.rotate != null) {
+          context.rotate(effects.rotate)
+        }
+      }
+      return context
+    }
+    
     return {
       target: target,
       container: container,
@@ -35,6 +52,7 @@ $(function() {
         brush = $.extend(brushDefaults, brush);
         context.strokeStyle = brush.stroke
         context.fillStyle = brush.fill
+        context = checkEffects(context, brush)
         context.strokeRect(x, y, w, h)
         context.fillRect(x, y, w, h)
       },
@@ -44,11 +62,12 @@ $(function() {
       },
       
       line : function(x0, y0, x1, y1, stroke) {
-        if(stroke == null) stroke = '#000'
+        if(stroke == null) stroke = 'black'
         context.beginPath()
         context.moveTo(x0, y0)
         context.lineTo(x1, y1)
         context.strokeStyle = stroke;
+        context = checkEffects(context, stroke)
         context.stroke();
       },
       
@@ -57,6 +76,7 @@ $(function() {
         context.arc(x, y, s, arcOptions.startAngle, arcOptions.endAngle, true);
         context.strokeStyle = arcOptions.stroke
         context.fillStyle = arcOptions.fill
+        context = checkEffects(context, arcOptions)
         context.stroke();
         context.fill();
       },
@@ -71,6 +91,7 @@ $(function() {
           else context.lineTo(begin, end)
         }
         if(pathOptions.close) context.closePath()
+        context = checkEffects(context, pathOptions)
         switch(pathOptions.style) {
           case 'stroke':
             context.strokeStyle = pathOptions.color;
@@ -83,11 +104,15 @@ $(function() {
         }
       },
       
-      image : function(source, x, y, w, h) {
+      image : function(source, x, y, imageOptions) {
         var img = new Image();
         img.onload = function() {
-          if(w != null) context.drawImage(img, x, y, w, h);
-          else context.drawImage(img, x, y);
+          context = checkEffects(context, imageOptions)
+          if(imageOptions != null && imageOptions.width != null) {
+            context.drawImage(img, x, y, imageOptions.width, imageOptions.height);
+          } else {
+            context.drawImage(img, x, y);
+          }
         }
         img.src = source;
       },
@@ -107,6 +132,7 @@ $(function() {
         if(textOptions.font != null) context.font = textOptions.font;
         context.textAlign = textOptions.align;
         context.textBaseline = textOptions.baseline;
+        context = checkEffects(context, textOptions)
         context.fillText(content, x, y);
       },
       
