@@ -46,7 +46,6 @@ $(function() {
     return {
       target: target,
       container: container,
-      board: board,
       
       rect : function(x, y, w, h, brush) {
         brush = $.extend(brushDefaults, brush);
@@ -67,7 +66,6 @@ $(function() {
         context.moveTo(x0, y0)
         context.lineTo(x1, y1)
         context.strokeStyle = stroke;
-        context = checkEffects(context, stroke)
         context.stroke();
       },
       
