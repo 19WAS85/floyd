@@ -1,0 +1,56 @@
+h1. Floyd
+
+An easy and simple way to use HTML5 canvas.
+
+h2. How to install?
+
+First you need to download the last version of jQuery, later add two lines in your html head:
+
+<pre>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="floyd.js"></script>
+</pre>
+
+Now you should forget Flash!
+
+h2. How to use?
+
+<pre>
+// Create a board
+var board = $('#yourCanvas').floyd()
+
+// Square
+board.square(10, 10, 100)
+
+// Custom square
+board.square(10, 10, 100, { stroke: 'red', fill: 'gold' })
+
+// Line
+board.line(20.5, 30, 100, 100)
+
+// Path
+board.path([[10, 20], [30, 25], [90, 70]])
+
+// Gradient
+var gradient = board.gradient(10, 20, 50, 100, ['gold', 'red'])
+board.square(10, 10, 100, { fill: gradient })
+
+// Shadow
+board.square(10, 10, 100, { fill: 'gold', shadow: { x: 0, y: 0, blur: 5, color: 'gray' } })
+</pre>
+
+h2. Functions
+
+* rect(x, y, w, h, options)
+* square(x, y, s, options)
+* line(x0, y0, x1, y1, stroke)
+* arc(x, y, s, options)
+* path(points, options)
+* image(source, x, y, options)
+* gradient(x0, y0, x1, y1, colors)
+* radialGradient(x0, y0, r0, x1, y1, r1, colors)
+* text(content, x, y, options)
+* clear()
+* loop(drawing, options)
+
+Sory, more documentation coming soon...
